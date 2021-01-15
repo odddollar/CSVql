@@ -1,4 +1,4 @@
-module github.com/odddollar/CSVql
+module CSVql
 
 go 1.15
 
