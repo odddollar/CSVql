@@ -18,7 +18,7 @@ func main() {
 
 	// create argparse arguments
 	file := parser.String("", "file", &argparse.Options{Help: "File to open"})
-	printData := parser.Flag("", "print", &argparse.Options{Default:  false, Help: "Display the loaded CSV file as a table"})
+	printData := parser.Flag("", "print", &argparse.Options{Default: false, Help: "Display the loaded CSV file as a table"})
 	create := parser.String("", "create", &argparse.Options{Help: "Create a CSV file at the specified location"})
 	getCell := parser.String("", "getcell", &argparse.Options{Help: "Get the value from a cell's x and y position, in the format of x|y"})
 	getRow := parser.Int("", "getrow", &argparse.Options{Help: "Get all values in a row, given by it's x position"})
@@ -54,17 +54,17 @@ func main() {
 			_ = os.Remove(*file)
 			f, _ := os.Create(*file)
 			writer := csv.NewWriter(f)
-			writer.WriteAll(newData)
+			_ = writer.WriteAll(newData)
 		}
 		if *appendColumn != "" {
 			// remove old file and write new data
 			_ = os.Remove(*file)
 			f, _ := os.Create(*file)
 			writer := csv.NewWriter(f)
-			writer.WriteAll(appendNewColumn(*appendColumn, data))
+			_ = writer.WriteAll(appendNewColumn(*appendColumn, data))
 		}
 		if *appendRow {
-			commas := []string{}
+			var commas []string
 			for i := 0; i < len(data[0]); i++ {
 				commas = append(commas, "")
 			}
@@ -74,7 +74,7 @@ func main() {
 			_ = os.Remove(*file)
 			f, _ := os.Create(*file)
 			writer := csv.NewWriter(f)
-			writer.WriteAll(data)
+			_ = writer.WriteAll(data)
 		}
 		if *getColumn != "" {
 			getColumnValues(*getColumn, data)
@@ -102,7 +102,7 @@ func main() {
 func loadDataToFrame(filePath string) [][]string {
 	// open file and create csv reader
 	file, _ := os.Open(filePath)
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 	r := csv.NewReader(file)
 
 	// read through csv lines
@@ -169,14 +169,16 @@ func getRowValues(row int, file string) {
 	scanner := bufio.NewScanner(f)
 
 	// create file lines array
-	lines := []string{}
+	var lines []string
 
 	// iterate through file lines, appending to array
 	for scanner.Scan() {
 		lines = append(lines, scanner.Text())
 	}
 
-	fmt.Println(lines[row-1])
+	if len(lines) > 0 {
+		fmt.Println(lines[row-1])
+	}
 }
 
 func getColumnValues(col string, t [][]string) {
