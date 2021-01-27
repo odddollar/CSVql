@@ -2,7 +2,7 @@
 CSV query language is a simple command-line program for taking some of the annoyance out of working with CSV files.
 
 ### Download and installation
-The program source can be downloaded from GitHub and built into a binary using ```go build main.go```. Prebuilt binary files are also available on GitHub.
+The program source can be downloaded from GitHub and built into a binary using ```go build CSVql```. Prebuilt binary files are also available on GitHub.
 
 ### Features
 The program supports
