@@ -44,9 +44,9 @@ func main() {
 
 		// if not creating file, check which arguments are given
 		if *setCell != "" {
-			x, _ := strconv.Atoi(strings.Split(*setCell, "|")[0])
-			y, _ := strconv.Atoi(strings.Split(*setCell, "|")[1])
-			value := strings.Split(*setCell, "|")[2]
+			x, _ := strconv.Atoi(strings.Split(*setCell, ";")[0])
+			y, _ := strconv.Atoi(strings.Split(*setCell, ";")[1])
+			value := strings.Split(*setCell, ";")[2]
 
 			// remove old file and write new data
 			setCellValue([2]int{x, y}, data, value)
@@ -85,8 +85,8 @@ func main() {
 			getRowValues(*getRow, data)
 		}
 		if *getCell != "" {
-			x, _ := strconv.Atoi(strings.Split(*getCell, "|")[0])
-			y, _ := strconv.Atoi(strings.Split(*getCell, "|")[1])
+			x, _ := strconv.Atoi(strings.Split(*getCell, ";")[0])
+			y, _ := strconv.Atoi(strings.Split(*getCell, ";")[1])
 			getCellValue([2]int{x, y}, data)
 		}
 		if *printData == true {

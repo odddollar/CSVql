@@ -31,7 +31,7 @@ To pretty print a CSV file
 
 To get the value from a cell
 
-```CSVql --file [PATH TO CSV FILE] --getcell x|y```
+```CSVql --file [PATH TO CSV FILE] --getcell x;y```
 
 To get the values from a row
 
@@ -43,7 +43,7 @@ To get the values from a column
 
 To set the value of a specific cell
 
-```CSVql --file [PATH TO CSV FILE] --setcell x|y|value```
+```CSVql --file [PATH TO CSV FILE] --setcell x;y;value```
 
 To append a new column
 
@@ -68,13 +68,13 @@ CSVql --file people.csv --appendcolumn name
 CSVql --file people.csv --appendcolumn age
 CSVql --file people.csv --appendcolumn gender
 CSVql --file people.csv --appendrow
-CSVql --file people.csv --setcell 1|2|Jeff
-CSVql --file people.csv --setcell 2|2|34
-CSVql --file people.csv --setcell 3|2|Male
+CSVql --file people.csv --setcell 1;2;Jeff
+CSVql --file people.csv --setcell 2;2;34
+CSVql --file people.csv --setcell 3;2;Male
 CSVql --file people.csv --appendrow
-CSVql --file people.csv --setcell 1|3|Andrea
-CSVql --file people.csv --setcell 2|3|52
-CSVql --file people.csv --setcell 3|3|Female
+CSVql --file people.csv --setcell 1;3;Andrea
+CSVql --file people.csv --setcell 2;3;52
+CSVql --file people.csv --setcell 3;3;Female
 CSVql --file people.csv --print
 ```
 
