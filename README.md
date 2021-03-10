@@ -23,43 +23,43 @@ The program supports
 
 To create a CSV file
 
-```[BINARY FILE NAME] --create [FILE NAME .CSV]```
+```CSVql --create [FILE NAME .CSV]```
 
 To pretty print a CSV file
 
-```[BINARY FILE NAME] --file [PATH TO CSV FILE] --print```
+```CSVql --file [PATH TO CSV FILE] --print```
 
 To get the value from a cell
 
-```[BINARY FILE NAME] --file [PATH TO CSV FILE] --getcell x|y```
+```CSVql --file [PATH TO CSV FILE] --getcell x|y```
 
 To get the values from a row
 
-```[BINARY FILE NAME] --file [PATH TO CSV FILE] --getrow x```
+```CSVql --file [PATH TO CSV FILE] --getrow x```
 
 To get the values from a column
 
-```[BINARY FILE NAME] --file [PATH TO CSV FILE] --getcolumn [COLUMN NAME]```
+```CSVql --file [PATH TO CSV FILE] --getcolumn [COLUMN NAME]```
 
 To set the value of a specific cell
 
-```[BINARY FILE NAME] --file [PATH TO CSV FILE] --setcell x|y|value```
+```CSVql --file [PATH TO CSV FILE] --setcell x|y|value```
 
 To append a new column
 
-```[BINARY FILE NAME] --file [PATH TO CSV FILE] --appendcolumn [NEW COLUMN NAME]```
+```CSVql --file [PATH TO CSV FILE] --appendcolumn [NEW COLUMN NAME]```
 
 To append an empty row
 
-```[BINARY FILE NAME] --file [PATH TO CSV FILE] --appendrow```
+```CSVql --file [PATH TO CSV FILE] --appendrow```
 
 To get number of rows
 
-```[BINARY FILE NAME] --file [PATH TO CSV FILE] --getnumrows```
+```CSVql --file [PATH TO CSV FILE] --getnumrows```
 
 To get number of columns
 
-```[BINARY FILE NAME] --file [PATH TO CSV FILE] --getnumcolumns```
+```CSVql --file [PATH TO CSV FILE] --getnumcolumns```
 
 ### Example
 ```
