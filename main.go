@@ -29,10 +29,14 @@ func main() {
 	getNumR := parser.Flag("", "getnumrows", &argparse.Options{Help: "Get the number of rows"})
 
 	// run argparse
-	err := parser.Parse(os.Args)
-	if err != nil {
-		fmt.Print(parser.Usage(err))
-		return
+	if len(os.Args) == 1 {
+		fmt.Print(parser.Usage(""))
+	} else {
+		err := parser.Parse(os.Args)
+		if err != nil {
+			fmt.Print(parser.Usage(err))
+			return
+		}
 	}
 
 	// check if creating file
