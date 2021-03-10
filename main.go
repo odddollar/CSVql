@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"encoding/csv"
 	"fmt"
 	"github.com/akamensky/argparse"
@@ -50,37 +49,40 @@ func main() {
 			value := strings.Split(*setCell, "|")[2]
 
 			// remove old file and write new data
-			newData := setCellValue([2]int{x, y}, data, value)
+			setCellValue([2]int{x, y}, data, value)
 			_ = os.Remove(*file)
 			f, _ := os.Create(*file)
 			writer := csv.NewWriter(f)
-			_ = writer.WriteAll(newData)
+			_ = writer.WriteAll(*data)
 		}
 		if *appendColumn != "" {
-			// remove old file and write new data
-			_ = os.Remove(*file)
-			f, _ := os.Create(*file)
-			writer := csv.NewWriter(f)
-			_ = writer.WriteAll(appendNewColumn(*appendColumn, data))
-		}
-		if *appendRow {
-			var commas []string
-			for i := 0; i < len(data[0]); i++ {
-				commas = append(commas, "")
-			}
-			data = append(data, commas)
+			// append new column
+			appendNewColumn(*appendColumn, data)
 
 			// remove old file and write new data
 			_ = os.Remove(*file)
 			f, _ := os.Create(*file)
 			writer := csv.NewWriter(f)
-			_ = writer.WriteAll(data)
+			_ = writer.WriteAll(*data)
+		}
+		if *appendRow {
+			var commas []string
+			for i := 0; i < len((*data)[0]); i++ {
+				commas = append(commas, "")
+			}
+			*data = append(*data, commas)
+
+			// remove old file and write new data
+			_ = os.Remove(*file)
+			f, _ := os.Create(*file)
+			writer := csv.NewWriter(f)
+			_ = writer.WriteAll(*data)
 		}
 		if *getColumn != "" {
 			getColumnValues(*getColumn, data)
 		}
 		if *getRow != 0 {
-			getRowValues(*getRow, *file)
+			getRowValues(*getRow, data)
 		}
 		if *getCell != "" {
 			x, _ := strconv.Atoi(strings.Split(*getCell, "|")[0])
@@ -99,7 +101,7 @@ func main() {
 	}
 }
 
-func loadDataToFrame(filePath string) [][]string {
+func loadDataToFrame(filePath string) *[][]string {
 	// open file and create csv reader
 	file, _ := os.Open(filePath)
 	defer func() { _ = file.Close() }()
@@ -115,27 +117,30 @@ func loadDataToFrame(filePath string) [][]string {
 		records = append(records, []string{})
 	}
 
-	return records
+	return &records
 }
 
-func getNumColumns(t [][]string) {
-	fmt.Println(len(t[0]))
+func getNumColumns(t *[][]string) {
+	// print number of columns
+	fmt.Println(len((*t)[0]))
 }
 
-func getNumRows(t [][]string) {
-	fmt.Println(len(t))
+func getNumRows(t *[][]string) {
+	// print number of rows
+	fmt.Println(len(*t))
 }
 
-func printTable(t [][]string) {
+func printTable(t *[][]string) {
 	// get table headers
-	headers := t[0]
+	headers := (*t)[0]
 
 	// create table writer and set headers
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader(headers)
 
-	for i := 1; i < len(t); i++ {
-		table.Append(t[i])
+	// add data to table
+	for i := 1; i < len(*t); i++ {
+		table.Append((*t)[i])
 	}
 
 	// render table
@@ -143,59 +148,51 @@ func printTable(t [][]string) {
 	table.Render()
 }
 
-func getCellValue(position [2]int, t [][]string) {
-	fmt.Printf("Value of cell at (%v,%v) is %v", position[0], position[1], t[position[1]-1][position[0]-1])
+func getCellValue(position [2]int, t *[][]string) {
+	// print value of cell at position
+	fmt.Println((*t)[position[1]-1][position[0]-1])
 }
 
-func setCellValue(position [2]int, t [][]string, value string) [][]string {
-	t[position[1]-1][position[0]-1] = value
-
-	return t
+func setCellValue(position [2]int, t *[][]string, value string) {
+	// set the value of the cell
+	(*t)[position[1]-1][position[0]-1] = value
 }
 
-func appendNewColumn(title string, t [][]string) [][]string {
-	t[0] = append(t[0], title)
+func appendNewColumn(title string, t *[][]string) {
+	// add new column to title row
+	(*t)[0] = append((*t)[0], title)
 
-	for i := 1; i < len(t); i++ {
-		t[i] = append(t[i], "")
-	}
-
-	return t
-}
-
-func getRowValues(row int, file string) {
-	// open file and create scanner
-	f, _ := os.Open(file)
-	scanner := bufio.NewScanner(f)
-
-	// create file lines array
-	var lines []string
-
-	// iterate through file lines, appending to array
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
-
-	if len(lines) > 0 {
-		fmt.Println(lines[row-1])
+	// iterate through empty last column and add empty data
+	for i := 1; i < len(*t); i++ {
+		(*t)[i] = append((*t)[i], "")
 	}
 }
 
-func getColumnValues(col string, t [][]string) {
+func getRowValues(row int, t *[][]string) {
+	// check if there are any rows
+	if len(*t) > 0 {
+		// print each row entry, separated with comma
+		for i := 0; i < len((*t)[row-1]); i++ {
+			fmt.Print((*t)[row-1][i], ", ")
+		}
+	}
+}
+
+func getColumnValues(col string, t *[][]string) {
 	// print column title
 	fmt.Println("1", col)
 
 	// get column name position
 	columnNumber := 0
-	for i := 0; i < len(t[0]); i++ {
-		if t[0][i] == col {
+	for i := 0; i < len((*t)[0]); i++ {
+		if (*t)[0][i] == col {
 			columnNumber = i
 			break
 		}
 	}
 
 	// print column values
-	for j := 1; j < len(t); j++ {
-		fmt.Println(j+1, t[j][columnNumber])
+	for j := 1; j < len(*t); j++ {
+		fmt.Println(j+1, (*t)[j][columnNumber])
 	}
 }
